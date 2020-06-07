@@ -18,7 +18,7 @@ namespace DandLRemake
                     controller.GameOver();
                     Console.WriteLine("\nПродолжить? д/н");
                     char answer = Console.ReadKey().KeyChar;
-                    if(answer == 'д' | answer == 'y' | answer == 'l' | answer == 'н' | answer == 'Д' | answer == 'Y' | answer == 'L' | answer == 'Н')
+                    if(answer == 'д' | answer == 'l' | answer == 'Д' | answer == 'L')
                     {
                         controller = new GameController();
                         controller.GenerateRandomAction();

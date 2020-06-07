@@ -55,9 +55,9 @@ namespace DandLRemake
         {
             image = image = new string[]
             {
-                "Перед вами " + Name,
-                "Здоровье: " + HP.ToString(),
-                "Мана: " + Mana.ToString()
+                $"Перед вами {Name}",
+                $"Здоровье: {HP}",
+                $"Мана: {Mana}"
             };
         }
 

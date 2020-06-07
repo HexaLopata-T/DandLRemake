@@ -14,8 +14,8 @@ namespace DandLRemake
         public Property Morality { get; protected set; }
         public Property XP { get; protected set; }
 
-        private const int moralMultiply = 2;
-        private const int satietyMultiply = 1;
+        private const int moralMultiply = 6;
+        private const int satietyMultiply = 3;
 
         private int strength = 5;
         private int endurance = 5;

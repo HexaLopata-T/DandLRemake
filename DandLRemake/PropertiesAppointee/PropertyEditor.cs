@@ -14,8 +14,8 @@ namespace DandLRemake.PropertiesAppointee
                 new Property("Мана", 20, true),
                 new Property("Защита", 0, false),
                 new Property("Золото", 0, false),
-                new Property("Сытость", 250, true),
-                new Property("Мораль", 250, true),
+                new Property("Сытость", 200, 100, true),
+                new Property("Мораль", 200,100, true),
                 new Property("Опыт",100, 0, false),
             };
         }

@@ -40,13 +40,9 @@ namespace DandLRemake
         public void Update()
         {
             var properties = editor.ReturnProperties();
-
             var parsedProperties = parser.PropertyArrayParse(properties);
-
             var environment = environmentGenerator.Generate(thisAction);
-
             var image = generetor.Generate(parsedProperties, environment);
-
             drawer.Draw(image);
         }
 
