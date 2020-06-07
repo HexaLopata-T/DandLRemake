@@ -105,11 +105,11 @@ namespace DandLRemake
                 Informer.SaveMessege("Враг повержен");
                 var IsLevelUP = player.ApplyXP(((Enemy)thisAction).XP);
                 player.SetMovesToShowToContinue();
-                Update();
 
                 var repeat = true;
 
                 if (IsLevelUP)
+                {
                     while (repeat)
                     {
                         player.SetMovesToShowForLevelUp();
@@ -117,7 +117,8 @@ namespace DandLRemake
                         Update();
                         repeat = player.ApplyLevel();
                     }
-                player.SetMovesToShowToContinue();
+                    player.SetMovesToShowToContinue();
+                }
             }
 
             Update();
