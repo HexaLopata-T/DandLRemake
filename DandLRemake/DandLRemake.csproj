@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{5B2474EF-2AB3-4508-9860-494929680BCB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DandLRemake</RootNamespace>
+    <AssemblyName>DandLRemake</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertiesAppointee\Property.cs" />
+    <Compile Include="PropertiesAppointee\PropertyEditor.cs" />
+    <Compile Include="GameController.cs" />
+    <Compile Include="Helpers\PropertyParser.cs" />
+    <Compile Include="Helpers\ImageGeneretor.cs" />
+    <Compile Include="Helpers\Drawer.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="Enemy.cs" />
+    <Compile Include="IHaveEnvironment.cs" />
+    <Compile Include="DamageType.cs" />
+    <Compile Include="Enemies\Enemies.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Events\Events.cs" />
+    <Compile Include="Helpers\EnvironmentGenerator.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="Informer.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
