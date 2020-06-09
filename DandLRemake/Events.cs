@@ -1,7 +1,6 @@
-﻿using System;
-using DandLRemake.PropertiesAppointee;
+﻿using DandLRemake.PropertiesAppointee;
 
-namespace DandLRemake.Events
+namespace DandLRemake
 {
     static class EventList
     {
@@ -33,7 +32,7 @@ namespace DandLRemake.Events
             };
         }
 
-        public override bool Action(char number, PropertyEditor stats, ref Player player)
+        public override bool Action(char number, ref Player player)
         {
             {
                 switch (number)
@@ -41,16 +40,16 @@ namespace DandLRemake.Events
                     case '1':
                         if (random.Next(0,2) > 0)
                         {
-                            var gold = stats.GetValue(3) + random.Next(10, 101);
+                            var gold = player.Gold.Value + random.Next(10, 101);
 
                             Informer.SaveMessege($"Вы получаете {gold} золота");
 
-                            stats.SetValue(3, gold);
+                            player.Gold.Value = gold;
                         }
                         else
                         {
                             Informer.SaveMessege("Вы попали в огненную ловушку");
-                            player.ApplyDamage(20, DamageType.Fire);
+                            player.ApplyDamage(random.Next(10, 30), DamageType.Fire);
                         }
                         return false;
                     case '2':

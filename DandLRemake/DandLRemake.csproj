@@ -33,6 +33,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Magic\Spell.cs" />
+    <Compile Include="Magic\SpellList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertiesAppointee\Property.cs" />
@@ -45,9 +47,9 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="IHaveEnvironment.cs" />
     <Compile Include="DamageType.cs" />
-    <Compile Include="Enemies\Enemies.cs" />
+    <Compile Include="Enemies.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Events\Events.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="Helpers\EnvironmentGenerator.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="Informer.cs" />

@@ -1,8 +1,6 @@
 ﻿using DandLRemake.PropertiesAppointee;
 using DandLRemake.Helpers;
-using DandLRemake.Events;
 using System;
-using DandLRemake.Enemies;
 
 namespace DandLRemake
 {
@@ -64,7 +62,7 @@ namespace DandLRemake
             while (turn)
             {
                 var choise = Console.ReadKey().KeyChar;
-                turn = ((Event)thisAction).Action(choise, editor, ref player);
+                turn = ((Event)thisAction).Action(choise, ref player);
                 if (!turn)
                     ((Event)thisAction).SetChoiseToContinue();
                 Update();
@@ -84,7 +82,10 @@ namespace DandLRemake
 
                 while (turn)
                 {
-                    var choise = Console.ReadKey().KeyChar;
+                    // if magic menu is open - we don't need choise 
+                    char choise = ' ';
+                    if (!player.IsOpenMagicMenu)
+                        choise = Console.ReadKey().KeyChar;
                     turn = player.Turn(choise, (Enemy)thisAction);
                     if(!turn)
                         player.SetMovesToShowToContinue();

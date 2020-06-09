@@ -1,5 +1,4 @@
-﻿using System;
-namespace DandLRemake
+﻿namespace DandLRemake
 {
     public interface IHaveEnvironment
     {

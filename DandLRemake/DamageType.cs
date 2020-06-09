@@ -1,5 +1,4 @@
-﻿using System;
-namespace DandLRemake
+﻿namespace DandLRemake
 {
     public enum DamageType
     {
@@ -7,6 +6,7 @@ namespace DandLRemake
         Fire,
         Ice,
         Magic,
-        Naturel
+        Natural,
+        None
     }
 }

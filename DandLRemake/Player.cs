@@ -1,4 +1,5 @@
 ﻿using System;
+using DandLRemake.Magic;
 using DandLRemake.PropertiesAppointee;
 
 namespace DandLRemake
@@ -14,14 +15,25 @@ namespace DandLRemake
         public Property Morality { get; protected set; }
         public Property XP { get; protected set; }
 
-        private const int moralMultiply = 6;
-        private const int satietyMultiply = 3;
+        protected Spell magicSlot1;
+        protected Spell magicSlot2;
+        protected Spell magicSlot3;
+        protected Spell magicSlot4;
 
-        private int strength = 5;
-        private int endurance = 5;
-        private int dexterity = 5;
-        private int luck = 5;
-        private int intelligence = 5;
+        protected const int moralMultiply = 6;
+        protected const int satietyMultiply = 3;
+
+        protected int strength = 5;
+        protected int endurance = 5;
+        protected int dexterity = 5;
+        protected int luck = 5;
+        protected int intelligence = 5;
+
+        public int Strength => strength;
+        public int Endurance => endurance;
+        public int Dexterity => dexterity;
+        public int Luck => luck;
+        public int Intelligence => intelligence;
 
         protected Random random;
 
@@ -30,7 +42,8 @@ namespace DandLRemake
 
         public PropertyEditor MyStats;
 
-        public bool IsDead = false;
+        public bool IsDead { get; set; } = false;
+        public bool IsOpenMagicMenu { get; set; } = false;
 
         public static string[] MovesToShow { get; protected set; }
         public static string[] RealMoves { get; protected set; }
@@ -66,6 +79,11 @@ namespace DandLRemake
 
             MovesToShow = new string[5];
             SetMovesToShowToReal();
+
+            magicSlot1 = new Cure(1);
+            magicSlot2 = new EmptySpell(1);
+            magicSlot3 = new EmptySpell(1);
+            magicSlot4 = new EmptySpell(1);
         }
 
         public void SetMovesToShowToContinue()
@@ -100,26 +118,42 @@ namespace DandLRemake
             };
         }
 
+        protected void SetMovesToShowToSpells()
+        {
+            MovesToShow = new string[5]
+            {
+                "1.Назад",
+                "2." + magicSlot1.ToString(),
+                "3." + magicSlot2.ToString(),
+                "4." + magicSlot3.ToString(),
+                "5."+ magicSlot4.ToString()
+            };
+        }
+
         public bool Turn(char choise, Enemy enemy)
         {
-            switch(choise)
+            if (IsOpenMagicMenu)
+                return Magic(enemy);
+            else
             {
-                case '1':
-                    Attack(enemy);
-                    return false;
-                case '2':
-                    Magic(enemy);
-                    return false;
-                case '3':
-                    Special(enemy);
-                    return false;
-                case '4':
-                    Item(enemy);
-                    return false;
-                case '5':
-                    Flee();
-                    return false;
-                default: return true;
+                switch (choise)
+                {
+                    case '1':
+                        Attack(enemy);
+                        return false;
+                    case '2':
+                        return Magic(enemy);
+                    case '3':
+                        Special(enemy);
+                        return false;
+                    case '4':
+                        Item(enemy);
+                        return false;
+                    case '5':
+                        Flee();
+                        return false;
+                    default: return true;
+                }
             }
         }
 
@@ -138,9 +172,76 @@ namespace DandLRemake
             Informer.SaveMessege("Anything");
         }
 
-        public virtual void Magic(Enemy enemy)
+        public virtual bool Magic(Enemy enemy)
         {
-            Informer.SaveMessege("Anything");
+            //if return true - repeat
+            if(IsOpenMagicMenu)
+            {
+                var input = Console.ReadKey().KeyChar;
+                switch(input)
+                {
+                    case '1':
+                        SetMovesToShowToReal();
+                        IsOpenMagicMenu = false;
+                        return true;
+                    case '2':
+                        if (Mana.Value >= magicSlot1.Price)
+                        {
+                            var result = magicSlot1.Use(enemy, this);
+                            IsOpenMagicMenu = result;
+                            return result;
+                        }
+                        else
+                        {
+                            Informer.SaveMessege("Не хватает маны");
+                            return true;
+                        }
+                    case '3':
+                        if (Mana.Value >= magicSlot2.Price)
+                        {
+                            var result = magicSlot2.Use(enemy, this);
+                            IsOpenMagicMenu = result;
+                            return result;
+                        }
+                        else
+                        {
+                            Informer.SaveMessege("Не хватает маны");
+                            return true;
+                        }
+                    case '4':
+                        if (Mana.Value >= magicSlot3.Price)
+                        {
+                            var result = magicSlot3.Use(enemy, this);
+                            IsOpenMagicMenu = result;
+                            return result;
+                        }
+                        else
+                        {
+                            Informer.SaveMessege("Не хватает маны");
+                            return true;
+                        }
+                    case '5':
+                        if (Mana.Value >= magicSlot4.Price)
+                        {
+                            var result = magicSlot4.Use(enemy, this);
+                            IsOpenMagicMenu = result;
+                            return result;
+                        }
+                        else
+                        {
+                            Informer.SaveMessege("Не хватает маны");
+                            return true;
+                        }
+                    default:
+                        return true;
+                }
+            }
+            else
+            {
+                IsOpenMagicMenu = true;
+                SetMovesToShowToSpells();
+                return true;
+            }
         }
 
         public virtual void Attack(Enemy enemy)
@@ -165,6 +266,18 @@ namespace DandLRemake
             else
                 Informer.SaveMessege($"Вы получаете 0 урона");
             CheckLive();
+        }
+
+        public virtual void ManaSpend(int amount)
+        {
+            Mana.Value -= amount;
+            Informer.SaveMessege($"Вы потратили {amount} маны");
+        }
+
+        public virtual void Heal(int amount)
+        {
+            HP.Value += amount;
+            Informer.SaveMessege($"Вы восстановили {amount} здоровья");
         }
 
         public virtual void Hunger()

@@ -37,7 +37,6 @@ namespace DandLRemake
 
                 controller.Update();
             }
-;
         }
     }
 }

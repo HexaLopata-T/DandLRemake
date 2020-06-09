@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DandLRemake.Enemies
+namespace DandLRemake
 {
     static class EnemyList
     {

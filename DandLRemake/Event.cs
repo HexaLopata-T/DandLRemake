@@ -27,7 +27,7 @@ namespace DandLRemake
             };
         }
 
-        public abstract bool Action(char number, PropertyEditor stats, ref Player player);
+        public abstract bool Action(char number, ref Player player);
 
         public abstract object Clone();
     }
