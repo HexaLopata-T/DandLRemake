@@ -7,8 +7,8 @@ namespace DandLRemake
 
         public static void SaveMessege(string _messege)
         {
-            if(messege != "")
-                messege += "; " + _messege;
+            if(messege != "" && messege != null)
+                messege += ", " + _messege;
             else
             {
                 messege = _messege;

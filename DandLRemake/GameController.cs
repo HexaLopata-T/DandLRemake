@@ -74,7 +74,7 @@ namespace DandLRemake
         private void Battle()
         {
             var turn = true;
-            while (((Enemy)thisAction).HP > 0 & !player.IsDead)
+            while (((Enemy)thisAction).HP > 0 && !player.IsDead)
             {
                 player.Hunger();
                 player.SetMovesToShowToReal();
@@ -82,12 +82,21 @@ namespace DandLRemake
 
                 while (turn)
                 {
-                    // if magic menu is open - we don't need choise 
+                    // if magic menu is open - we don't need a choise 
                     char choise = ' ';
-                    if (!player.IsOpenMagicMenu)
+                    if (!player.IsOpenMenu && !player.IsOpenItemMenu)
                         choise = Console.ReadKey().KeyChar;
                     turn = player.Turn(choise, (Enemy)thisAction);
-                    if(!turn)
+                    if(player.IsFlee)
+                    {
+                        player.SetMovesToShowToContinue();
+                        Update();
+                        Console.ReadKey();
+                        GenerateRandomAction();
+                        player.IsFlee = false;
+                        return;
+                    }
+                    if (!turn)
                         player.SetMovesToShowToContinue();
                     Update();
                 }
@@ -101,6 +110,14 @@ namespace DandLRemake
                 turn = true;
             }
 
+            CheckEnemyDefeat();
+
+            Update();
+            Console.ReadKey();
+        }
+
+        private void CheckEnemyDefeat()
+        {
             if (((Enemy)thisAction).HP <= 0)
             {
                 Informer.SaveMessege("Враг повержен");
@@ -121,9 +138,6 @@ namespace DandLRemake
                     player.SetMovesToShowToContinue();
                 }
             }
-
-            Update();
-            Console.ReadKey();
         }
 
         public void GenerateRandomAction()
@@ -144,7 +158,6 @@ namespace DandLRemake
         public void Start(IHaveEnvironment firstAction)
         {
             thisAction = firstAction;
-            Update();
         }
 
         public Event GenerateRandomEvent()

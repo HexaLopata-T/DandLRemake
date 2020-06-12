@@ -21,7 +21,7 @@ namespace DandLRemake.Magic
         public Cure(int _level) : base(_level)
         {
             Type = DamageType.Natural;
-            defaultDamage = 30;
+            defaultDamage = 60;
             Price = 7 * _level;
             Name = "Лечение";
         }
@@ -33,7 +33,7 @@ namespace DandLRemake.Magic
 
         public override bool Use(Enemy enemy, Player player)
         {
-            var heal = defaultDamage * Level * player.Intelligence / 5;
+            var heal = defaultDamage * Level * player.Intelligence;
             if (player.HP.Value < player.HP.MaxValue)
             {
                 player.ManaSpend(Price);

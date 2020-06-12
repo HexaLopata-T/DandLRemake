@@ -33,6 +33,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\Itemlist.cs" />
     <Compile Include="Magic\Spell.cs" />
     <Compile Include="Magic\SpellList.cs" />
     <Compile Include="Program.cs" />
@@ -51,7 +53,6 @@
     <Compile Include="Player.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Helpers\EnvironmentGenerator.cs" />
-    <Compile Include="Move.cs" />
     <Compile Include="Informer.cs" />
   </ItemGroup>
   <ItemGroup />

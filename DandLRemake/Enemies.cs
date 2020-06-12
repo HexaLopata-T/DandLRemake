@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using DandLRemake.Items;
 
 namespace DandLRemake
 {
@@ -32,12 +34,12 @@ namespace DandLRemake
 
         public Slime()
         {
-            HP = 10;
-            Mana = 5;
-            Armor = 1;
-            DefaultDamage = 5;
+            HP = 100;
+            Mana = 50;
+            Armor = 5;
+            DefaultDamage = 50;
             DodgeChance = 10;
-            XP = 10;
+            XP = 100;
 
             damageType = DamageType.Normal;
 
@@ -45,7 +47,10 @@ namespace DandLRemake
 
             random = new Random();
 
-            UpdateStats();
+            dropList.Add(new Potion(15));
+            dropList.Add(new Potion(10));
+
+            UpdateEnvironment();
         }
     }
 
@@ -55,11 +60,11 @@ namespace DandLRemake
         public Phoenix()
         {
             HP = 16;
-            Mana = 20;
+            Mana = 200;
             Armor = 0;
-            DefaultDamage = 8;
+            DefaultDamage = 80;
             DodgeChance = 10;
-            XP = 15;
+            XP = 150;
 
             damageType = DamageType.Fire;
 
@@ -67,7 +72,7 @@ namespace DandLRemake
 
             random = new Random();
 
-            UpdateStats();
+            UpdateEnvironment();
         }
 
         public override object Clone()

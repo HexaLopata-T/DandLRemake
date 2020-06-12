@@ -10,13 +10,13 @@ namespace DandLRemake.PropertiesAppointee
         {
             properties = new Property[]
             {
-                new Property("Здоровье", 100, true),
-                new Property("Мана", 20, true),
+                new Property("Здоровье", 1000, true),
+                new Property("Мана", 200, true),
                 new Property("Защита", 0, false),
                 new Property("Золото", 0, false),
-                new Property("Сытость", 200, 100, true),
-                new Property("Мораль", 200,100, true),
-                new Property("Опыт",100, 0, false),
+                new Property("Сытость", 2000, 1000, true),
+                new Property("Мораль", 2000, 1000, true),
+                new Property("Опыт", 500, 0, true),
             };
         }
 

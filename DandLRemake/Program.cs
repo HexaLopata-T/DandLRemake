@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DandLRemake.Items;
+using System;
 
 namespace DandLRemake
 {
@@ -7,6 +8,8 @@ namespace DandLRemake
         public static void Main()
         {
             GameController controller = new GameController();
+
+            controller.player.ApplyItem(new Shuriken(1));
 
             controller.Start(controller.GenerateRandomEnemy());
             while(true)

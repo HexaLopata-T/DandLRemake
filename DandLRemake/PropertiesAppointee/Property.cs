@@ -30,11 +30,11 @@
             else
             {
                 string result = Name + ": " + "[";
-                for(int i = 0; i < Value/15; i++)
+                for(int i = 0; i < Value/150; i++)
                 {
                     result += "#";
                 }
-                for (int i = 0; i < MaxValue/15 - Value / 15; i++)
+                for (int i = 0; i < MaxValue/150 - Value / 150; i++)
                 {
                     result += " ";
                 }

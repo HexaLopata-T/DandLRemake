@@ -1,5 +1,6 @@
 ﻿using System;
-using DandLRemake.PropertiesAppointee;
+using System.Collections.Generic;
+using DandLRemake.Items;
 
 namespace DandLRemake
 {
@@ -15,6 +16,8 @@ namespace DandLRemake
         private int dodgeChance;
         private int xP;
 
+        protected List<Item> dropList = new List<Item>();
+
         public const int maxStat = 10000;
 
         public int HP { get { return hP; } protected set { if (value >= 0 & value <= maxStat) { hP = value; } else hP = 0; } }
@@ -23,8 +26,8 @@ namespace DandLRemake
         public int DefaultDamage { get { return defaultDamage; } protected set { if (value >= 0 & value <= maxStat) { defaultDamage = value; } else defaultDamage = 0; } }
         public int DodgeChance { get { return dodgeChance; } protected set { if (value >= 0 & value <= maxStat) { dodgeChance = value; } else dodgeChance = 0; } }
         public int XP { get { return xP; } protected set { if (value >= 0 & value <= maxStat) { xP = value; } else xP = 0; } }
-        public string Name { get; protected set; }
-        public DamageType damageType { get; protected set; }
+        public string Name { get; protected set; } = "Враг";
+        public DamageType damageType { get; protected set; } = DamageType.Normal;
 
         public virtual string[] ReturnEnvironment()
         {
@@ -34,16 +37,16 @@ namespace DandLRemake
         public virtual void Turn(ref Player player)
         {
             Informer.SaveMessege($"{Name} атакует");
-            player.ApplyDamage(DefaultDamage + random.Next(-DefaultDamage/5, DefaultDamage/5), damageType);
+            player.ApplyDamage(DefaultDamage + random.Next(-DefaultDamage/5, 2 * DefaultDamage/5), damageType);
         }
 
         public virtual void ApplyDamage(int damage, DamageType type)
         {
-            if (random.Next(1, 101) >= DodgeChance | damage > 0)
+            if (random.Next(1, 101) >= DodgeChance && damage - Armor > 0)
             {
                 HP -= (damage - Armor);
                 Informer.SaveMessege($"{Name} получает {(damage - Armor)} урона");
-                UpdateStats();
+                UpdateEnvironment();
             }
             else
             {
@@ -51,7 +54,7 @@ namespace DandLRemake
             }
         }
 
-        public virtual void UpdateStats()
+        public virtual void UpdateEnvironment()
         {
             image = image = new string[]
             {
@@ -62,6 +65,15 @@ namespace DandLRemake
         }
 
         public abstract object Clone();
+
+        public void DropItems(Player player)
+        {
+            foreach(var item in dropList)
+            {
+                if (random.Next(1, 101) <= item.DropChance)
+                    player.ApplyItem(item);
+            }
+        }
 
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using DandLRemake.Magic;
+using DandLRemake.Items;
 using DandLRemake.PropertiesAppointee;
 
 namespace DandLRemake
@@ -37,13 +39,22 @@ namespace DandLRemake
 
         protected Random random;
 
-        protected int baseDamage = 5;
-        protected int baseDodgeChance = 5;
+        protected int baseDamage = 10;
+        protected int baseDodgeChance = 1;
+        protected int baseFleeChance = 20;
+
+        public int BaseDamage { get { return baseDamage; } }
+        public int BaseDodgeChance { get { return baseDodgeChance; } }
+        public int BaseFleeChance { get { return baseFleeChance; } }
 
         public PropertyEditor MyStats;
 
         public bool IsDead { get; set; } = false;
-        public bool IsOpenMagicMenu { get; set; } = false;
+        public bool IsOpenMenu { get; set; } = false;
+        public bool IsOpenItemMenu { get; set; } = false;
+        public bool IsFlee { get; set; } = false;
+        protected int numberOfPocket = 0;
+        protected List<Item> inventory;
 
         public static string[] MovesToShow { get; protected set; }
         public static string[] RealMoves { get; protected set; }
@@ -84,6 +95,8 @@ namespace DandLRemake
             magicSlot2 = new EmptySpell(1);
             magicSlot3 = new EmptySpell(1);
             magicSlot4 = new EmptySpell(1);
+
+            inventory = new List<Item>();
         }
 
         public void SetMovesToShowToContinue()
@@ -130,9 +143,26 @@ namespace DandLRemake
             };
         }
 
+        protected void SetMovesToShowToItems()
+        {
+            MovesToShow[0] = "1.Назад";
+            for (int i = 0; i < MovesToShow.Length - 1; i++)
+            {
+                if (inventory.Count > i + numberOfPocket * 4)
+                    MovesToShow[i + 1] = $"{i + 2}.{inventory[i + numberOfPocket * 4]}"; 
+                else
+                    MovesToShow[i + 1] = $"{i + 2}..........";
+            }
+
+            MovesToShow[3] += " D -> ";
+            MovesToShow[4] += " A <- ";
+        }
+
         public bool Turn(char choise, Enemy enemy)
         {
-            if (IsOpenMagicMenu)
+            if(IsOpenItemMenu)
+                return Item(enemy);
+            if (IsOpenMenu)
                 return Magic(enemy);
             else
             {
@@ -147,8 +177,7 @@ namespace DandLRemake
                         Special(enemy);
                         return false;
                     case '4':
-                        Item(enemy);
-                        return false;
+                        return Item(enemy);
                     case '5':
                         Flee();
                         return false;
@@ -159,12 +188,92 @@ namespace DandLRemake
 
         public virtual void Flee()
         {
-            Informer.SaveMessege("Anything");
+            if (random.Next(1, 101) < baseFleeChance * Luck / 5)
+            {
+                IsFlee = true;
+                Informer.SaveMessege("Вы попытались сбежать... И у вас получилось!");
+            }
+            else
+                Informer.SaveMessege("Вы попытались сбежать... Но не смогли");
         }
 
-        public void Item(Enemy enemy)
+        public bool Item(Enemy enemy)
         {
-            Informer.SaveMessege("Anything");
+            if (IsOpenItemMenu)
+            {
+                var input = Console.ReadKey().KeyChar;
+                switch (input)
+                {
+                    case '1':
+                        SetMovesToShowToReal();
+                        IsOpenMenu = false;
+                        return true;
+                    case '2':
+                        if (inventory.Count > 0 + numberOfPocket * 4)
+                        {
+                            inventory[0 + numberOfPocket * 4].Use(this, enemy);
+                            DeleteItem(inventory[0 + numberOfPocket * 4]);
+                            IsOpenItemMenu = false;
+                            return false;
+                        }
+                        return true;
+                    case '3':
+                        if (inventory.Count > 1 + numberOfPocket * 4)
+                        {
+                            inventory[1 + numberOfPocket * 4].Use(this, enemy);
+                            DeleteItem(inventory[1 + numberOfPocket * 4]);
+                            IsOpenItemMenu = false;
+                            return false;
+                        }
+                        return true;
+                    case '4':
+                        if (inventory.Count > 2 + numberOfPocket * 4)
+                        { 
+                            inventory[2 + numberOfPocket * 4].Use(this, enemy);
+                            DeleteItem(inventory[2 + numberOfPocket * 4]);
+                            IsOpenItemMenu = false;
+                            return false;
+                        }
+                        return true;
+                    case '5':
+                        if (inventory.Count > 3 + numberOfPocket * 4)
+                        {
+                            inventory[3 + numberOfPocket * 4].Use(this, enemy);
+                            DeleteItem(inventory[3 + numberOfPocket * 4]);
+                            IsOpenItemMenu = false;
+                            return false;
+                        }
+                        return true;
+                    case 'a':
+                    case 'A':
+                    case 'ф':
+                    case 'Ф':
+                        if (numberOfPocket - 1 < 0)
+                            numberOfPocket = (inventory.Count - 1) / 4;
+                        else
+                            numberOfPocket--;
+                        SetMovesToShowToItems();
+                        return true;
+                    case 'd':
+                    case 'D':
+                    case 'в':
+                    case 'В':
+                        if (numberOfPocket + 1 >= (double)inventory.Count / 4)
+                            numberOfPocket = 0;
+                        else
+                            numberOfPocket++;
+                        SetMovesToShowToItems();
+                        return true;
+                    default:
+                        return true;
+                }
+            }
+            else
+            {
+                IsOpenItemMenu = true;
+                SetMovesToShowToItems();
+                return true;
+            }
         }
 
         public virtual void Special(Enemy enemy)
@@ -175,20 +284,20 @@ namespace DandLRemake
         public virtual bool Magic(Enemy enemy)
         {
             //if return true - repeat
-            if(IsOpenMagicMenu)
+            if(IsOpenMenu)
             {
                 var input = Console.ReadKey().KeyChar;
                 switch(input)
                 {
                     case '1':
                         SetMovesToShowToReal();
-                        IsOpenMagicMenu = false;
+                        IsOpenMenu = false;
                         return true;
                     case '2':
                         if (Mana.Value >= magicSlot1.Price)
                         {
                             var result = magicSlot1.Use(enemy, this);
-                            IsOpenMagicMenu = result;
+                            IsOpenMenu = result;
                             return result;
                         }
                         else
@@ -200,7 +309,7 @@ namespace DandLRemake
                         if (Mana.Value >= magicSlot2.Price)
                         {
                             var result = magicSlot2.Use(enemy, this);
-                            IsOpenMagicMenu = result;
+                            IsOpenMenu = result;
                             return result;
                         }
                         else
@@ -212,7 +321,7 @@ namespace DandLRemake
                         if (Mana.Value >= magicSlot3.Price)
                         {
                             var result = magicSlot3.Use(enemy, this);
-                            IsOpenMagicMenu = result;
+                            IsOpenMenu = result;
                             return result;
                         }
                         else
@@ -224,7 +333,7 @@ namespace DandLRemake
                         if (Mana.Value >= magicSlot4.Price)
                         {
                             var result = magicSlot4.Use(enemy, this);
-                            IsOpenMagicMenu = result;
+                            IsOpenMenu = result;
                             return result;
                         }
                         else
@@ -238,7 +347,7 @@ namespace DandLRemake
             }
             else
             {
-                IsOpenMagicMenu = true;
+                IsOpenMenu = true;
                 SetMovesToShowToSpells();
                 return true;
             }
@@ -249,22 +358,24 @@ namespace DandLRemake
             Informer.SaveMessege("Игрок атакует");
             Morality.Value -= moralMultiply;
 
-            var damage = baseDamage + random.Next(-1 * baseDamage/5, 2 * baseDamage/5) * strength/5;
+            var damage = (baseDamage * strength + random.Next(-1 * baseDamage/5 * strength, 2 * baseDamage/5 * strength)) ;
 
             enemy.ApplyDamage(damage, DamageType.Normal);
         }
 
-        public virtual void ApplyDamage(int _basedamage, DamageType type)
+        public virtual void ApplyDamage(int _baseDamage, DamageType type)
         {
-            var damage = (_basedamage - Armor.Value * endurance / 5);
-            if(random.Next(1, 101) > baseDodgeChance * dexterity / 5)
-            if (damage > 0)
-            {
-                HP.Value -= damage;
-                Informer.SaveMessege($"Вы получаете {damage} урона");
-            }
+            var damage = (_baseDamage - Armor.Value * endurance);
+            if(random.Next(1, 101) > baseDodgeChance * dexterity)
+                if (damage > 0)
+                {
+                    HP.Value -= damage;
+                    Informer.SaveMessege($"Вы получаете {damage} урона");
+                }
+                else
+                    Informer.SaveMessege("Вы получаете 0 урона");
             else
-                Informer.SaveMessege($"Вы получаете 0 урона");
+                Informer.SaveMessege("Вы увернулись");
             CheckLive();
         }
 
@@ -339,6 +450,35 @@ namespace DandLRemake
             {
                 IsDead = true;
             }
+        }
+
+        public void ApplyItem(Item _item)
+        {
+            if (inventory.Count > 0)
+            {
+                foreach (var item in inventory)
+                {
+                    if (item.GetType() == _item.GetType())
+                    {
+                        item.Count++;
+                        Informer.SaveMessege($"Вы получили {_item.Name}");
+                        return;
+                    }
+                }
+                inventory.Add(_item);
+                Informer.SaveMessege($"Вы получили {_item.Name}");
+            }
+            else
+                inventory.Add(_item);
+            Informer.SaveMessege($"Вы получили {_item.Name}");
+
+        }
+
+        protected void DeleteItem(Item _item)
+        {
+            _item.Count--;
+            if (_item.Count <= 0)
+                inventory.Remove(_item);
         }
     }
 }
