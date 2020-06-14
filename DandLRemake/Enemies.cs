@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DandLRemake.Items;
 
 namespace DandLRemake
@@ -8,14 +7,13 @@ namespace DandLRemake
     {
         public static Enemy[] enemies = new Enemy[]
         {
-            new Slime(),
-            new Phoenix(),
+            new Slime(-1),
+            new Phoenix(-1),
         };
 
-        public static Enemy ReturnEnemy(int id)
+        public static Enemy ReturnEnemy(int id, int level)
         {
-            var enemyForReturn = enemies[id];
-            enemies[id] = (Enemy)enemies[id].Clone();
+            var enemyForReturn = (Enemy)enemies[id].Clone(level);
             return enemyForReturn;
         }
     }
@@ -27,19 +25,19 @@ namespace DandLRemake
             return image;
         }
 
-        public override object Clone()
+        public override object Clone(int _level)
         {
-            return new Slime();
+            return new Slime(_level);
         }
 
-        public Slime()
+        public Slime(int _level) : base(_level)
         {
-            HP = 100;
-            Mana = 50;
-            Armor = 5;
-            DefaultDamage = 50;
+            HP = Convert.ToInt32(100 * statsMultiply);
+            Mana = Convert.ToInt32(50 * statsMultiply);
+            Armor = Convert.ToInt32(5 * statsMultiply);
+            DefaultDamage = Convert.ToInt32(50 * statsMultiply);
             DodgeChance = 10;
-            XP = 100;
+            XP = Convert.ToInt32(100 * statsMultiply);
 
             damageType = DamageType.Normal;
 
@@ -48,7 +46,7 @@ namespace DandLRemake
             random = new Random();
 
             dropList.Add(new Potion(15));
-            dropList.Add(new Potion(10));
+            dropList.Add(new Shuriken(10));
 
             UpdateEnvironment();
         }
@@ -57,14 +55,14 @@ namespace DandLRemake
     public sealed class Phoenix : Enemy
     {
 
-        public Phoenix()
+        public Phoenix(int _level) : base(_level)
         {
-            HP = 16;
-            Mana = 200;
+            HP = Convert.ToInt32(160 * statsMultiply);
+            Mana = Convert.ToInt32(200 * statsMultiply);
             Armor = 0;
-            DefaultDamage = 80;
+            DefaultDamage = Convert.ToInt32(80 * statsMultiply);
             DodgeChance = 10;
-            XP = 150;
+            XP = Convert.ToInt32(150 * statsMultiply);
 
             damageType = DamageType.Fire;
 
@@ -75,9 +73,9 @@ namespace DandLRemake
             UpdateEnvironment();
         }
 
-        public override object Clone()
+        public override object Clone(int _level)
         {
-            return new Phoenix();
+            return new Phoenix(_level);
         }
     }
 }

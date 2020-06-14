@@ -33,6 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IClonableWithLevel.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\Itemlist.cs" />
     <Compile Include="Magic\Spell.cs" />

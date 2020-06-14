@@ -9,8 +9,6 @@ namespace DandLRemake
         {
             GameController controller = new GameController();
 
-            controller.player.ApplyItem(new Shuriken(1));
-
             controller.Start(controller.GenerateRandomEnemy());
             while(true)
             {

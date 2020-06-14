@@ -17,6 +17,7 @@ namespace DandLRemake.PropertiesAppointee
                 new Property("Сытость", 2000, 1000, true),
                 new Property("Мораль", 2000, 1000, true),
                 new Property("Опыт", 500, 0, true),
+                new Property("Уровень", 100, 1, false),
             };
         }
 

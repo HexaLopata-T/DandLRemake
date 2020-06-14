@@ -122,6 +122,7 @@ namespace DandLRemake
             {
                 Informer.SaveMessege("Враг повержен");
                 var IsLevelUP = player.ApplyXP(((Enemy)thisAction).XP);
+                ((Enemy)thisAction).DropItems(player);
                 player.SetMovesToShowToContinue();
 
                 var repeat = true;
@@ -169,7 +170,7 @@ namespace DandLRemake
         public Enemy GenerateRandomEnemy()
         {
             var id = random.Next(0, EnemyList.enemies.Length);
-            return EnemyList.ReturnEnemy(id);
+            return EnemyList.ReturnEnemy(id, random.Next(1, player.Level.Value + 2));
         }
     }
 }

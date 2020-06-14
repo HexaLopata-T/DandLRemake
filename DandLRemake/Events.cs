@@ -11,8 +11,7 @@ namespace DandLRemake
 
         public static Event ReturnEvent(int id)
         {
-            var eventForReturn = events[id];
-            events[id] = (Event)events[id].Clone();
+            var eventForReturn = (Event)events[id].Clone();
             return eventForReturn;
         }
     }
@@ -49,7 +48,7 @@ namespace DandLRemake
                         else
                         {
                             Informer.SaveMessege("Вы попали в огненную ловушку");
-                            player.ApplyDamage(random.Next(10, 30), DamageType.Fire);
+                            player.ApplyDamage(random.Next(100, 301), DamageType.Fire);
                         }
                         return false;
                     case '2':

@@ -16,6 +16,7 @@ namespace DandLRemake
         public Property Satiety { get; protected set; }
         public Property Morality { get; protected set; }
         public Property XP { get; protected set; }
+        public Property Level { get; protected set; }
 
         protected Spell magicSlot1;
         protected Spell magicSlot2;
@@ -24,6 +25,7 @@ namespace DandLRemake
 
         protected const int moralMultiply = 6;
         protected const int satietyMultiply = 3;
+        protected const double statsMultiply = 1.1;
 
         protected int strength = 5;
         protected int endurance = 5;
@@ -70,6 +72,7 @@ namespace DandLRemake
             Satiety = MyStats.ReturnProperty(4);
             Morality = MyStats.ReturnProperty(5);
             XP = MyStats.ReturnProperty(6);
+            Level = MyStats.ReturnProperty(7);
 
             random = new Random();
 
@@ -422,26 +425,42 @@ namespace DandLRemake
                 case '1':
                     strength++;
                     repeat = false;
+                    Level.Value++;
+                    IncreaseStats();
                     break;
                 case '2':
                     endurance++;
                     repeat = false;
+                    Level.Value++;
+                    IncreaseStats();
                     break;
                 case '3':
                     dexterity++;
                     repeat = false;
+                    Level.Value++;
+                    IncreaseStats();
                     break;
                 case '4':
                     luck++;
                     repeat = false;
+                    Level.Value++;
+                    IncreaseStats();
                     break;
                 case '5':
                     intelligence++;
                     repeat = false;
+                    Level.Value++;
+                    IncreaseStats();
                     break;
             }
 
             return repeat;
+        }
+
+        private void IncreaseStats()
+        {
+            HP.Value = Convert.ToInt32(HP.Value * statsMultiply);
+            Mana.Value = Convert.ToInt32(Mana.Value * statsMultiply);
         }
 
         private void CheckLive()

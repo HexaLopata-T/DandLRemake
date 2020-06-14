@@ -25,7 +25,7 @@ namespace DandLRemake.Helpers
                 image[i] = _environment[i];
             }
             image[_environment.Length] = Informer.ReturnMessege();
-            image[_environment.Length + 1] = "_________________________________________";
+            image[_environment.Length + 1] = "______________________________________________________________________________";
 
             if (environment is Enemy)
             {
