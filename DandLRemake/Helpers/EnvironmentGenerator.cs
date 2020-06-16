@@ -5,7 +5,7 @@ namespace DandLRemake.Helpers
     public class EnvironmentGenerator
     {
         private string[] image;
-        public const int ActionPanelHeight = 5;
+        public const int ActionPanelHeight = 7;
         public const int LocationPanelHeight = 23;
 
 

@@ -4,7 +4,7 @@ namespace DandLRemake.Helpers
 {
     public class ImageGeneretor
     {
-        private int maxStrings = 30;
+        private readonly int maxStrings = EnvironmentGenerator.ActionPanelHeight + EnvironmentGenerator.LocationPanelHeight + 2;
         private string[] Contaner;
         private string[] Properties;
         private string[] Environment;

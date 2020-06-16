@@ -82,9 +82,9 @@ namespace DandLRemake
 
                 while (turn)
                 {
-                    // if magic menu is open - we don't need a choise 
+                    // if main menu isn't open - we don't need a choise 
                     char choise = ' ';
-                    if (!player.IsOpenMenu && !player.IsOpenItemMenu)
+                    if (player.IsMenuOpenOn == MenuPage.Main)
                         choise = Console.ReadKey().KeyChar;
                     turn = player.Turn(choise, (Enemy)thisAction);
                     if(player.IsFlee)

@@ -1,4 +1,5 @@
 ﻿using System;
+using DandLRemake.Equip;
 using DandLRemake.Items;
 
 namespace DandLRemake

@@ -1,6 +1,4 @@
-﻿using DandLRemake.PropertiesAppointee;
-
-namespace DandLRemake
+﻿namespace DandLRemake
 {
     static class EventList
     {
@@ -21,13 +19,15 @@ namespace DandLRemake
         {
             image = new string[] { "Вы встретили сундук", };
 
-            choise = new string[]
+            choise = new string[7]
             {
                 "1.Забрать",
                 "2.Пройти мимо",
                 "",
                 "",
-                ""
+                "",
+                "",
+                "",
             };
         }
 

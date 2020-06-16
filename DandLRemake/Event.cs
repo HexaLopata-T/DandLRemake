@@ -17,9 +17,11 @@ namespace DandLRemake
 
         public void SetChoiseToContinue()
         {
-            choise = new string[]
+            choise = new string[7]
             {
                 "1.Продолжить",
+                "",
+                "",
                 "",
                 "",
                 "",

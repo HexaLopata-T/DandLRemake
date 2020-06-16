@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Activation;
+using DandLRemake.Equip;
 using DandLRemake.Items;
 
 namespace DandLRemake
@@ -21,6 +21,7 @@ namespace DandLRemake
         private int level = 0;
 
         protected List<Item> dropList = new List<Item>();
+        protected List<Equippable> equipDropList = new List<Equippable>();
 
         public const int maxStat = 10000;
 
@@ -82,6 +83,11 @@ namespace DandLRemake
             {
                 if (random.Next(1, 101) <= item.DropChance)
                     player.ApplyItem(item);
+            }
+            foreach(var equip in equipDropList)
+            {
+                if (random.Next(1, 101) <= equip.DropChance)
+                    player.ApplyEquip(equip);
             }
         }
 
