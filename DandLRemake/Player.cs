@@ -28,7 +28,7 @@ namespace DandLRemake
         protected Leggings leggings;
         protected Boots boots;
         protected Ring ring1;
-        protected Ring ring2;
+        protected Weapon weapon;
         #endregion
 
         #region Inventories
@@ -37,6 +37,7 @@ namespace DandLRemake
         protected List<Leggings> leggingsInventory;
         protected List<Boots> bootsInventory;
         protected List<Ring> ringsInventory;
+        protected List<Weapon> weaponsInventory;
         protected List<Item> itemInventory;
         #endregion
 
@@ -134,12 +135,12 @@ namespace DandLRemake
                 new EmptySpell(1),
             };
 
-            helmet = new Helmet();
-            chestplate = new Chestplate();
-            leggings = new Leggings();
-            boots = new Boots();
-            ring1 = new Ring();
-            ring2 = new Ring();
+            helmet = new Helmet(0);
+            chestplate = new Chestplate(0);
+            leggings = new Leggings(0);
+            boots = new Boots(0);
+            ring1 = new Ring(0);
+            weapon = new Weapon(0);
 
             itemInventory = new List<Item>();
             helmetInventory = new List<Helmet>();
@@ -147,6 +148,7 @@ namespace DandLRemake
             leggingsInventory = new List<Leggings>();
             bootsInventory = new List<Boots>();
             ringsInventory = new List<Ring>();
+            weaponsInventory = new List<Weapon>();
         }
 
         #region Set moves to show
@@ -227,13 +229,14 @@ namespace DandLRemake
                 "4." + leggings.ToString(),
                 "5." + boots.ToString(),
                 "6." + ring1.ToString(),
-                "7." + ring2.ToString()
+                "7." + weapon.ToString()
             };
         }
         #endregion
 
         public bool Turn(char choise, Enemy enemy)
         {
+            EquipOnAnyTurn(enemy);
             if(IsMenuOpenOn == MenuPage.Item)
                 return Item(enemy);
             if (IsMenuOpenOn == MenuPage.Magic)
@@ -301,8 +304,8 @@ namespace DandLRemake
                         numberOfPocket = 0;
                         return true;
                     case '7':
-                        IsMenuOpenOn = MenuPage.Rings2;
-                        SetMovesToShowToAnyInventory(ringsInventory);
+                        IsMenuOpenOn = MenuPage.Weapons;
+                        SetMovesToShowToAnyInventory(weaponsInventory);
                         numberOfPocket = 0;
                         return true;
                     default:
@@ -332,8 +335,8 @@ namespace DandLRemake
                     case MenuPage.Rings:
                         ChangeCurrentEquip(ref ring1, ringsInventory);
                         return true;
-                    case MenuPage.Rings2:
-                        ChangeCurrentEquip(ref ring2, ringsInventory);
+                    case MenuPage.Weapons:
+                        ChangeCurrentEquip(ref weapon, weaponsInventory);
                         return true;
                     default:
                         IsMenuOpenOn = MenuPage.Main;
@@ -401,9 +404,11 @@ namespace DandLRemake
             var takenOffEquip = equip;
             if (number < inventory.Count)
             {
+                EquipOnUnequip();
                 equip = inventory[number];
                 inventory.RemoveAt(number);
                 inventory.Add(takenOffEquip);
+                EquipOnEquip();
             }
             SetMovesToShowToAnyInventory(inventory);
         }
@@ -551,15 +556,84 @@ namespace DandLRemake
             Informer.SaveMessege("Игрок атакует");
             Morality.Value -= moralMultiply;
 
-            var damage = (baseDamage * strength + random.Next(-1 * baseDamage/5 * strength, 2 * baseDamage/5 * strength)) ;
+            var damage = (baseDamage * strength + random.Next(-1 * baseDamage/5 * strength, 2 * baseDamage/5 * strength));
+            EquipOnAttack(enemy, damage);
 
             enemy.ApplyDamage(damage, DamageType.Normal);
+        }
+
+        #region Equip Effects
+        private void EquipOnAttack(Enemy enemy, int damage)
+        {
+            helmet.OnAttack(this, enemy, damage);
+            chestplate.OnAttack(this, enemy, damage);
+            leggings.OnAttack(this, enemy, damage);
+            boots.OnAttack(this, enemy, damage);
+            ring1.OnAttack(this, enemy, damage);
+            weapon.OnAttack(this, enemy, damage);
+        }
+        private void EquipOnDamage(int damage, DamageType damageType, Enemy enemy)
+        {
+            helmet.OnDamage(damage, damageType, this, enemy);
+            chestplate.OnDamage(damage, damageType, this, enemy);
+            leggings.OnDamage(damage, damageType, this, enemy);
+            leggings.OnDamage(damage, damageType, this, enemy);
+            ring1.OnDamage(damage, damageType, this, enemy);
+            weapon.OnDamage(damage, damageType, this, enemy);
+
+        }
+        private void EquipOnAnyTurn(Enemy enemy)
+        {
+            helmet.OnAnyTurn(this, enemy);
+            chestplate.OnAnyTurn(this, enemy);
+            leggings.OnAnyTurn(this, enemy);
+            leggings.OnAnyTurn(this, enemy);
+            ring1.OnAnyTurn(this, enemy);
+            weapon.OnAnyTurn(this, enemy);
+        }
+        private void EquipOnEquip()
+        {
+            helmet.OnEquip(this);
+            chestplate.OnEquip(this);
+            leggings.OnEquip(this);
+            boots.OnEquip(this);
+            ring1.OnEquip(this);
+            weapon.OnEquip(this);
+        }
+        private void EquipOnUnequip()
+        {
+            helmet.OnUnequip(this);
+            chestplate.OnUnequip(this);
+            leggings.OnUnequip(this);
+            boots.OnUnequip(this);
+            ring1.OnUnequip(this);
+            weapon.OnUnequip(this);
+        }
+        #endregion
+
+        public virtual void ApplyDamage(int _baseDamage, DamageType type, Enemy enemy)
+        {
+            var damage = (_baseDamage - Armor.Value * endurance);
+            EquipOnDamage(_baseDamage, type, enemy);
+
+            if(random.Next(1, 101) > baseDodgeChance * dexterity)
+                if (damage > 0)
+                {
+                    HP.Value -= damage;
+                    Informer.SaveMessege($"Вы получаете {damage} урона");
+                }
+                else
+                    Informer.SaveMessege("Вы получаете 0 урона");
+            else
+                Informer.SaveMessege("Вы увернулись");
+            CheckLive();
         }
 
         public virtual void ApplyDamage(int _baseDamage, DamageType type)
         {
             var damage = (_baseDamage - Armor.Value * endurance);
-            if(random.Next(1, 101) > baseDodgeChance * dexterity)
+
+            if (random.Next(1, 101) > baseDodgeChance * dexterity)
                 if (damage > 0)
                 {
                     HP.Value -= damage;
@@ -688,9 +762,28 @@ namespace DandLRemake
             if (equippable is Helmet)
             {
                 helmetInventory.Add((Helmet)equippable);
-                Informer.SaveMessege($"Получен шлем: {equippable}");
+                Informer.SaveMessege($"Получено {equippable}");
             }
-
+            if (equippable is Chestplate)
+            {
+                chestplatesInventory.Add((Chestplate)equippable);
+                Informer.SaveMessege($"Получено {equippable}");
+            }
+            if (equippable is Leggings)
+            {
+                leggingsInventory.Add((Leggings)equippable);
+                Informer.SaveMessege($"Получено {equippable}");
+            }
+            if (equippable is Boots)
+            {
+                bootsInventory.Add((Boots)equippable);
+                Informer.SaveMessege($"Получено {equippable}");
+            }
+            if (equippable is Ring)
+            {
+                ringsInventory.Add((Ring)equippable);
+                Informer.SaveMessege($"Получено {equippable}");
+            }
         }
 
         protected void DeleteItem(Item _item)

@@ -49,7 +49,7 @@ namespace DandLRemake
         public virtual void Turn(ref Player player)
         {
             Informer.SaveMessege($"{Name} атакует");
-            player.ApplyDamage(DefaultDamage + random.Next(-DefaultDamage / 5, 2 * DefaultDamage / 5), damageType);
+            player.ApplyDamage(DefaultDamage + random.Next(-DefaultDamage / 5, 2 * DefaultDamage / 5), damageType, this);
         }
 
         public virtual void ApplyDamage(int damage, DamageType type)

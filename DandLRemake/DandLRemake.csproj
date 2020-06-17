@@ -39,6 +39,7 @@
     <Compile Include="Equip\Equippable.cs" />
     <Compile Include="Equip\Leggings.cs" />
     <Compile Include="Equip\Ring.cs" />
+    <Compile Include="Equip\Weapon.cs" />
     <Compile Include="IClonableWithLevel.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\Itemlist.cs" />

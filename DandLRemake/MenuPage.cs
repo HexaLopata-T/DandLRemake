@@ -17,6 +17,6 @@ namespace DandLRemake
         Leggings,
         Boots,
         Rings,
-        Rings2
+        Weapons
     }
 }

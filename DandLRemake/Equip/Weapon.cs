@@ -1,13 +1,13 @@
-﻿using System;
-
-namespace DandLRemake.Equip
+﻿namespace DandLRemake.Equip
 {
-    public class Ring : Equippable
+    public class Weapon : Equippable
     {
-        public Ring(int dropChance) : base(dropChance)
+        public DamageType type { get; protected set; } = DamageType.Normal;
+
+        public Weapon(int dropChance) : base(dropChance)
         {
-            name = "Костяное кольцо";
-            info = "Семейная реликвия";
+            name = "Праща";
+            info = "Оружие на скорую руку, малоэффективно";
         }
 
         public override void OnAnyTurn(Player player, Enemy enemy) { }

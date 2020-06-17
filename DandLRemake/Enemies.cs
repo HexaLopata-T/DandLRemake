@@ -71,6 +71,13 @@ namespace DandLRemake
 
             random = new Random();
 
+            dropList.Add(new Potion(20));
+
+            equipDropList.Add(new IronHelmet(20));
+            equipDropList.Add(new IronChestplate(15));
+            equipDropList.Add(new IronLeggings(18));
+            equipDropList.Add(new IronBoots(25));
+
             UpdateEnvironment();
         }
 
