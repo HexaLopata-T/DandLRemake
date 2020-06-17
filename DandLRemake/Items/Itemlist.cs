@@ -5,6 +5,7 @@
         public Shuriken(int i) : base(i)
         {
             Name = "Сюрикен";
+            Price = 70;
         }
 
         public override void Use(Player player, Enemy enemy)
@@ -19,12 +20,13 @@
         public Potion(int i) : base(i)
         {
             Name = "Зелье лечения";
+            Price = 25;
         }
 
         public override void Use(Player player, Enemy enemy)
         {
             Informer.SaveMessege("Вы выпили зелье лечения");
-            player.Heal(player.HP.Value / 3);
+            player.Heal(player.HP.MaxValue / 3);
         }
     }
 }

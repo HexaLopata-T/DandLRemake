@@ -6,8 +6,8 @@ namespace DandLRemake.Equip
     {
         public Boots(int dropChance) : base(dropChance)
         {
-            name = "Рваные ботинки";
-            info = "Время их не пощадило";
+            Name = "Рваные ботинки";
+            Info = "Время их не пощадило";
         }
 
         public override void OnAnyTurn(Player player, Enemy enemy) { }
@@ -26,8 +26,9 @@ namespace DandLRemake.Equip
         public IronBoots(int dropChance) : base(dropChance)
         {
             Armor = 3;
-            name = "Железные ботинки";
-            info = "Добротные ботинки, дают немного брони";
+            Name = "Железные ботинки";
+            Info = "Добротные ботинки, дают немного брони";
+            Price = 15;
         }
 
         public override void OnEquip(Player player)

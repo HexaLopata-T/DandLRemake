@@ -6,8 +6,8 @@ namespace DandLRemake.Equip
     {
         public Ring(int dropChance) : base(dropChance)
         {
-            name = "Костяное кольцо";
-            info = "Семейная реликвия";
+            Name = "Костяное кольцо";
+            Info = "Семейная реликвия";
         }
 
         public override void OnAnyTurn(Player player, Enemy enemy) { }

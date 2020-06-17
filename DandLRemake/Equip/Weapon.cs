@@ -6,8 +6,8 @@
 
         public Weapon(int dropChance) : base(dropChance)
         {
-            name = "Праща";
-            info = "Оружие на скорую руку, малоэффективно";
+            Name = "Праща";
+            Info = "Оружие на скорую руку, малоэффективно";
         }
 
         public override void OnAnyTurn(Player player, Enemy enemy) { }

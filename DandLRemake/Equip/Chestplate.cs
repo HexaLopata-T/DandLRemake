@@ -6,8 +6,8 @@ namespace DandLRemake.Equip
     {
         public Chestplate(int dropChance): base(dropChance)
         {
-            name = "Старая рубаха";
-            info = "Уже давно покрылась пятнами";
+            Name = "Старая рубаха";
+            Info = "Уже давно покрылась пятнами";
         }
         public override void OnAnyTurn(Player player, Enemy enemy) { }
 
@@ -25,8 +25,9 @@ namespace DandLRemake.Equip
         public IronChestplate(int dropChance) : base(dropChance)
         {
             Armor = 6;
-            name = "Железный нагрудник";
-            info = "Добротный нагрудник, дает немного брони";
+            Name = "Железный нагрудник";
+            Info = "Добротный нагрудник, дает немного брони";
+            Price = 25;
         }
 
         public override void OnEquip(Player player)

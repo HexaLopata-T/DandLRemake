@@ -64,9 +64,13 @@ namespace DandLRemake
                 var choise = Console.ReadKey().KeyChar;
                 turn = ((Event)thisAction).Action(choise, ref player);
                 if (!turn)
+                {
                     ((Event)thisAction).SetChoiseToContinue();
-                Update();
-                Console.ReadKey();
+                    Update();
+                    Console.ReadKey();
+                }
+                else
+                    Update();
             }
             player.Hunger();
         }

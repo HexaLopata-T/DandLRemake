@@ -18,12 +18,13 @@ namespace DandLRemake
         private int defaultDamage = 0;
         private int dodgeChance = 0;
         private int xP = 0;
+        private int gold = 0;
         private int level = 0;
 
         protected List<Item> dropList = new List<Item>();
         protected List<Equippable> equipDropList = new List<Equippable>();
 
-        public const int maxStat = 10000;
+        public const int maxStat = 100000;
 
         public int HP { get { return hP; } protected set { if (value >= 0 & value <= maxStat) { hP = value; } else hP = 0; } }
         public int Mana { get { return mana; } protected set { if (value >= 0 & value <= maxStat) { mana = value; } else mana = 0; } }
@@ -31,6 +32,7 @@ namespace DandLRemake
         public int DefaultDamage { get { return defaultDamage; } protected set { if (value >= 0 & value <= maxStat) { defaultDamage = value; } else defaultDamage = 0; } }
         public int DodgeChance { get { return dodgeChance; } protected set { if (value >= 0 & value <= maxStat) { dodgeChance = value; } else dodgeChance = 0; } }
         public int XP { get { return xP; } protected set { if (value >= 0 & value <= maxStat) { xP = value; } else xP = 0; } }
+        public int Gold { get { return gold; } protected set { if (value >= 0 & value <= maxStat) { gold = value; } else gold = 0; } }
         public int Level => level;
         public string Name { get; protected set; } = "Враг";
         public DamageType damageType { get; protected set; } = DamageType.Normal;
@@ -79,14 +81,15 @@ namespace DandLRemake
 
         public void DropItems(Player player)
         {
-            foreach(var item in dropList)
+            player.ApplyGold(Gold + random.Next(-Gold / 5, 2 * Gold / 5));
+            foreach (var item in dropList)
             {
-                if (random.Next(1, 101) <= item.DropChance)
+                if (random.Next(1, 101) <= item.DropChance * player.Luck / 4)
                     player.ApplyItem(item);
             }
             foreach(var equip in equipDropList)
             {
-                if (random.Next(1, 101) <= equip.DropChance)
+                if (random.Next(1, 101) <= equip.DropChance * player.Luck / 4)
                     player.ApplyEquip(equip);
             }
         }

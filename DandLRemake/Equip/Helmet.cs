@@ -7,8 +7,8 @@ namespace DandLRemake.Equip
     {
         public Helmet(int dropChance) : base(dropChance)
         {
-            name = "Соломенная шляпа";
-            info = "Шляпа от солнца, сделана в свободное время";
+            Name = "Соломенная шляпа";
+            Info = "Шляпа от солнца, сделана в свободное время";
         }
 
         public override void OnAnyTurn(Player player, Enemy enemy) { }
@@ -27,8 +27,9 @@ namespace DandLRemake.Equip
         public IronHelmet(int dropChance) : base(dropChance)
         {
             Armor = 4;
-            name = "Железный шлем";
-            info = "Добротный шлем, дает немного брони";
+            Name = "Железный шлем";
+            Info = "Добротный шлем, дает немного брони";
+            Price = 20;
         }
 
         public override void OnEquip(Player player)

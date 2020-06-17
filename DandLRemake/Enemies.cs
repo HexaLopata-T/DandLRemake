@@ -39,6 +39,7 @@ namespace DandLRemake
             DefaultDamage = Convert.ToInt32(50 * statsMultiply);
             DodgeChance = 10;
             XP = Convert.ToInt32(100 * statsMultiply);
+            Gold = Convert.ToInt32(10 * statsMultiply);
 
             damageType = DamageType.Normal;
 
@@ -64,6 +65,7 @@ namespace DandLRemake
             DefaultDamage = Convert.ToInt32(80 * statsMultiply);
             DodgeChance = 10;
             XP = Convert.ToInt32(150 * statsMultiply);
+            Gold = Convert.ToInt32(13 * statsMultiply);
 
             damageType = DamageType.Fire;
 

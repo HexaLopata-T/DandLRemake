@@ -4,6 +4,7 @@
     {
         public string Name { get; protected set; }
         public int DropChance { get; protected set; }
+        public int Price { get; protected set; } = 0;
         public int Count { get; set; } = 1;
 
         public Item(int _dropChance)

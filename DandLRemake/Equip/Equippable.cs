@@ -5,10 +5,10 @@ namespace DandLRemake.Equip
     public abstract class Equippable
     {
         public int Armor { get; protected set; } = 0;
-
-        protected string name = "???";
-        protected string info = "???";
+        public int Price { get; protected set; } = 0;
         public int DropChance { get; protected set; }
+        public string Name { get; protected set; } = "???";
+        public string Info { get; protected set; } = "???";
 
         public Equippable(int dropChance)
         {
@@ -17,7 +17,7 @@ namespace DandLRemake.Equip
 
         public override string ToString()
         {
-            return $"{name} : {info}";
+            return $"{Name} : {Info}";
         }
 
         public abstract void OnEquip(Player player);

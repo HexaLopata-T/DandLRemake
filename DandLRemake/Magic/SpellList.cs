@@ -22,7 +22,7 @@ namespace DandLRemake.Magic
         {
             Type = DamageType.Natural;
             defaultDamage = 60;
-            Price = 7 * _level;
+            Price = 35 * _level;
             Name = "Лечение";
         }
 

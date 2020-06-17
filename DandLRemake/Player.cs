@@ -654,6 +654,8 @@ namespace DandLRemake
 
         public virtual void Heal(int amount)
         {
+            if (HP.Value + amount >= HP.MaxValue)
+                amount -= (HP.Value + amount - HP.MaxValue);
             HP.Value += amount;
             Informer.SaveMessege($"Вы восстановили {amount} здоровья");
         }
@@ -723,8 +725,8 @@ namespace DandLRemake
 
         private void IncreaseStats()
         {
-            HP.Value = Convert.ToInt32(HP.Value * statsMultiply);
-            Mana.Value = Convert.ToInt32(Mana.Value * statsMultiply);
+            HP.MaxValue = Convert.ToInt32(HP.MaxValue * statsMultiply);
+            Mana.MaxValue = Convert.ToInt32(Mana.MaxValue * statsMultiply);
         }
 
         private void CheckLive()
@@ -752,8 +754,10 @@ namespace DandLRemake
                 Informer.SaveMessege($"Вы получили {_item.Name}");
             }
             else
+            {
                 itemInventory.Add(_item);
-            Informer.SaveMessege($"Вы получили {_item.Name}");
+                Informer.SaveMessege($"Вы получили {_item.Name}");
+            }
 
         }
 
@@ -762,28 +766,34 @@ namespace DandLRemake
             if (equippable is Helmet)
             {
                 helmetInventory.Add((Helmet)equippable);
-                Informer.SaveMessege($"Получено {equippable}");
+                Informer.SaveMessege($"Вы получили {equippable.Name}");
             }
             if (equippable is Chestplate)
             {
                 chestplatesInventory.Add((Chestplate)equippable);
-                Informer.SaveMessege($"Получено {equippable}");
+                Informer.SaveMessege($"Вы получили {equippable.Name}");
             }
             if (equippable is Leggings)
             {
                 leggingsInventory.Add((Leggings)equippable);
-                Informer.SaveMessege($"Получено {equippable}");
+                Informer.SaveMessege($"Вы получили {equippable.Name}");
             }
             if (equippable is Boots)
             {
                 bootsInventory.Add((Boots)equippable);
-                Informer.SaveMessege($"Получено {equippable}");
+                Informer.SaveMessege($"Вы получили {equippable.Name}");
             }
             if (equippable is Ring)
             {
                 ringsInventory.Add((Ring)equippable);
-                Informer.SaveMessege($"Получено {equippable}");
+                Informer.SaveMessege($"Вы получили {equippable.Name}");
             }
+        }
+
+        public void ApplyGold(int amount)
+        {
+            Gold.Value += amount;
+            Informer.SaveMessege($"Вы получили {amount} золота");
         }
 
         protected void DeleteItem(Item _item)
