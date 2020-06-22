@@ -4,6 +4,7 @@ using DandLRemake.Magic;
 using DandLRemake.Items;
 using DandLRemake.Equip;
 using DandLRemake.PropertiesAppointee;
+using DandLRemake.Effects;
 
 namespace DandLRemake
 {
@@ -30,6 +31,8 @@ namespace DandLRemake
         protected Ring ring1;
         protected Weapon weapon;
         #endregion
+
+        public Effect State { get; protected set; } = new None();
 
         #region Inventories
         protected List<Helmet> helmetInventory;
@@ -83,7 +86,7 @@ namespace DandLRemake
         public MenuPage IsMenuOpenOn { get; protected set; }
         protected int numberOfPocket = 0;
         protected const int pocketSize = 6;
- 
+
         public static string[] MovesToShow { get; protected set; }
         public static string[] RealMoves { get; protected set; }
 
@@ -236,32 +239,53 @@ namespace DandLRemake
 
         public bool Turn(char choise, Enemy enemy)
         {
-            EquipOnAnyTurn(enemy);
-            if(IsMenuOpenOn == MenuPage.Item)
-                return Item(enemy);
+            bool repeat = true;
+            if (IsMenuOpenOn == MenuPage.Item)
+            {
+                repeat = Item(enemy);
+                OnAnyTurn(enemy, repeat);
+                return repeat;
+            }
             if (IsMenuOpenOn == MenuPage.Magic)
-                return Magic(enemy);
+            {
+                repeat = Magic(enemy);
+                OnAnyTurn(enemy, repeat);
+                return repeat;
+            }
             if (IsMenuOpenOn != MenuPage.Main && IsMenuOpenOn != MenuPage.Magic && IsMenuOpenOn != MenuPage.Item)
-                return ChangeEquip();
+            {
+                repeat = ChangeEquip();
+                OnAnyTurn(enemy, repeat);
+                return repeat;
+            }
             else
             {
                 switch (choise)
                 {
                     case '1':
                         Attack(enemy);
+                        OnAnyTurn(enemy, false);
                         return false;
                     case '2':
-                        return Magic(enemy);
+                        repeat = Magic(enemy);
+                        OnAnyTurn(enemy, repeat);
+                        return repeat;
                     case '3':
                         Special(enemy);
+                        OnAnyTurn(enemy, false);
                         return false;
                     case '4':
-                        return Item(enemy);
+                        repeat = Item(enemy);
+                        OnAnyTurn(enemy, repeat);
+                        return repeat;
                     case '5':
                         Flee();
+                        OnAnyTurn(enemy, false);
                         return false;
                     case '6':
-                        return ChangeEquip();
+                        repeat = ChangeEquip();
+                        OnAnyTurn(enemy, repeat);
+                        return repeat;
                     default: return true;
                 }
             }
@@ -314,7 +338,7 @@ namespace DandLRemake
             }
             else
             {
-                switch(IsMenuOpenOn)
+                switch (IsMenuOpenOn)
                 {
                     case MenuPage.Main:
                         IsMenuOpenOn = MenuPage.Equip;
@@ -404,11 +428,11 @@ namespace DandLRemake
             var takenOffEquip = equip;
             if (number < inventory.Count)
             {
-                EquipOnUnequip();
+                OnUnequip();
                 equip = inventory[number];
                 inventory.RemoveAt(number);
                 inventory.Add(takenOffEquip);
-                EquipOnEquip();
+                OnEquip();
             }
             SetMovesToShowToAnyInventory(inventory);
         }
@@ -500,10 +524,10 @@ namespace DandLRemake
         public virtual bool Magic(Enemy enemy)
         {
             //if return true - repeat
-            if(IsMenuOpenOn == MenuPage.Magic)
+            if (IsMenuOpenOn == MenuPage.Magic)
             {
                 var input = Console.ReadKey().KeyChar;
-                switch(input)
+                switch (input)
                 {
                     case '1':
                         SetMovesToShowToReal();
@@ -556,14 +580,14 @@ namespace DandLRemake
             Informer.SaveMessege("Игрок атакует");
             Morality.Value -= moralMultiply;
 
-            var damage = (baseDamage * strength + random.Next(-1 * baseDamage/5 * strength, 2 * baseDamage/5 * strength));
-            EquipOnAttack(enemy, damage);
+            var damage = (baseDamage * strength + random.Next(-1 * baseDamage / 5 * strength, 2 * baseDamage / 5 * strength));
+            OnAttack(enemy, damage);
 
             enemy.ApplyDamage(damage, DamageType.Normal);
         }
 
-        #region Equip Effects
-        private void EquipOnAttack(Enemy enemy, int damage)
+        #region Effects
+        private void OnAttack(Enemy enemy, int damage)
         {
             helmet.OnAttack(this, enemy, damage);
             chestplate.OnAttack(this, enemy, damage);
@@ -571,27 +595,41 @@ namespace DandLRemake
             boots.OnAttack(this, enemy, damage);
             ring1.OnAttack(this, enemy, damage);
             weapon.OnAttack(this, enemy, damage);
+            State.OnAttack(this, enemy, damage);
         }
-        private void EquipOnDamage(int damage, DamageType damageType, Enemy enemy)
+        private void OnDamage(int damage, DamageType damageType, Enemy enemy)
         {
             helmet.OnDamage(damage, damageType, this, enemy);
             chestplate.OnDamage(damage, damageType, this, enemy);
             leggings.OnDamage(damage, damageType, this, enemy);
-            leggings.OnDamage(damage, damageType, this, enemy);
+            boots.OnDamage(damage, damageType, this, enemy);
             ring1.OnDamage(damage, damageType, this, enemy);
             weapon.OnDamage(damage, damageType, this, enemy);
+            State.OnDamage(damage, damageType, this, enemy);
 
         }
-        private void EquipOnAnyTurn(Enemy enemy)
+        private void OnDamage(int damage, DamageType damageType)
         {
-            helmet.OnAnyTurn(this, enemy);
-            chestplate.OnAnyTurn(this, enemy);
-            leggings.OnAnyTurn(this, enemy);
-            leggings.OnAnyTurn(this, enemy);
-            ring1.OnAnyTurn(this, enemy);
-            weapon.OnAnyTurn(this, enemy);
+            helmet.OnDamage(damage, damageType, this);
+            chestplate.OnDamage(damage, damageType, this);
+            leggings.OnDamage(damage, damageType, this);
+            boots.OnDamage(damage, damageType, this);
+            ring1.OnDamage(damage, damageType, this);
+            weapon.OnDamage(damage, damageType, this);
+            State.OnDamage(damage, damageType, this);
+
         }
-        private void EquipOnEquip()
+        private void OnAnyTurn(Enemy enemy, bool repeat)
+        {
+            helmet.OnAnyTurn(this, enemy, repeat);
+            chestplate.OnAnyTurn(this, enemy, repeat);
+            leggings.OnAnyTurn(this, enemy, repeat);
+            boots.OnAnyTurn(this, enemy, repeat);
+            ring1.OnAnyTurn(this, enemy, repeat);
+            weapon.OnAnyTurn(this, enemy, repeat);
+            State.OnAnyTurn(this, enemy, repeat);
+        }
+        private void OnEquip()
         {
             helmet.OnEquip(this);
             chestplate.OnEquip(this);
@@ -600,7 +638,7 @@ namespace DandLRemake
             ring1.OnEquip(this);
             weapon.OnEquip(this);
         }
-        private void EquipOnUnequip()
+        private void OnUnequip()
         {
             helmet.OnUnequip(this);
             chestplate.OnUnequip(this);
@@ -613,10 +651,10 @@ namespace DandLRemake
 
         public virtual void ApplyDamage(int _baseDamage, DamageType type, Enemy enemy)
         {
-            var damage = (_baseDamage - Armor.Value * endurance);
-            EquipOnDamage(_baseDamage, type, enemy);
+            var damage = (_baseDamage - Armor.Value * endurance / 2);
+            OnDamage(_baseDamage, type, enemy);
 
-            if(random.Next(1, 101) > baseDodgeChance * dexterity)
+            if (random.Next(1, 101) > baseDodgeChance * dexterity)
                 if (damage > 0)
                 {
                     HP.Value -= damage;
@@ -631,7 +669,8 @@ namespace DandLRemake
 
         public virtual void ApplyDamage(int _baseDamage, DamageType type)
         {
-            var damage = (_baseDamage - Armor.Value * endurance);
+            var damage = (_baseDamage - Armor.Value * endurance / 2);
+            OnDamage(_baseDamage, type);
 
             if (random.Next(1, 101) > baseDodgeChance * dexterity)
                 if (damage > 0)
@@ -686,7 +725,7 @@ namespace DandLRemake
             var choise = Console.ReadKey().KeyChar;
             var repeat = true;
 
-            switch(choise)
+            switch (choise)
             {
                 case '1':
                     strength++;
@@ -801,6 +840,21 @@ namespace DandLRemake
             _item.Count--;
             if (_item.Count <= 0)
                 itemInventory.Remove(_item);
+        }
+
+        public void SetEffect(Effect effect)
+        {
+            State = effect;
+            Informer.SaveMessege($"Наложен эффект: {effect}");
+        }
+
+        public void DeleteEffect()
+        {
+            if (State.GetType() != typeof(None))
+            {
+                Informer.SaveMessege($"Вы избавились от: {State}");
+                State = new None();
+            }
         }
     }
 }

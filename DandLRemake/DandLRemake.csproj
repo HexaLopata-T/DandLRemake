@@ -33,6 +33,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Effects\Effect.cs" />
+    <Compile Include="Effects\EffectList.cs" />
     <Compile Include="Equip\Boots.cs" />
     <Compile Include="Equip\Chestplate.cs" />
     <Compile Include="Equip\Helmet.cs" />

@@ -84,7 +84,7 @@ namespace DandLRemake
                 player.SetMovesToShowToReal();
                 Update();
 
-                while (turn)
+                while (turn && !player.IsDead)
                 {
                     // if main menu isn't open - we don't need a choise 
                     char choise = ' ';

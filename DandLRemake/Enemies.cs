@@ -1,4 +1,5 @@
 ﻿using System;
+using DandLRemake.Effects;
 using DandLRemake.Equip;
 using DandLRemake.Items;
 
@@ -10,6 +11,7 @@ namespace DandLRemake
         {
             new Slime(-1),
             new Phoenix(-1),
+            new Imp(-1),
         };
 
         public static Enemy ReturnEnemy(int id, int level)
@@ -21,11 +23,6 @@ namespace DandLRemake
 
     public sealed class Slime : Enemy
     {
-        public override string[] ReturnEnvironment()
-        {
-            return image;
-        }
-
         public override object Clone(int _level)
         {
             return new Slime(_level);
@@ -86,6 +83,49 @@ namespace DandLRemake
         public override object Clone(int _level)
         {
             return new Phoenix(_level);
+        }
+    }
+
+    public sealed class Imp : Enemy
+    {
+        public Imp(int _level) : base(_level)
+        {
+            HP = Convert.ToInt32(135 * statsMultiply);
+            Mana = Convert.ToInt32(70 * statsMultiply);
+            Armor = Convert.ToInt32(7 * statsMultiply);
+            DefaultDamage = Convert.ToInt32(57 * statsMultiply);
+            DodgeChance = 5;
+            XP = Convert.ToInt32(135 * statsMultiply);
+            Gold = Convert.ToInt32(20 * statsMultiply);
+
+            damageType = DamageType.Fire;
+
+            Name = "Чертенок";
+
+            random = new Random();
+
+            equipDropList.Add(new DevilsSlippers(100));
+
+            UpdateEnvironment();
+        }
+
+        public override void Turn(ref Player player)
+        {
+            if (Mana > 30 && random.Next(1, 101) < 10)
+            {
+                Mana -= 30;
+                Informer.SaveMessege($"{Name} пытается поджечь вас");
+                if (random.Next(1, 101) < 40)
+                    player.SetEffect(new Burn());
+                else
+                    Informer.SaveMessege("Но не вышло");
+            }
+            base.Turn(ref player);
+        }
+
+        public override object Clone(int _level)
+        {
+            return new Imp(_level);
         }
     }
 }

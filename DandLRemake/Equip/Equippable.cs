@@ -23,7 +23,8 @@ namespace DandLRemake.Equip
         public abstract void OnEquip(Player player);
         public abstract void OnAttack(Player player, Enemy enemy, int damage);
         public abstract void OnDamage(int damageAmount, DamageType damageType, Player player, Enemy enemy);
-        public abstract void OnAnyTurn(Player player, Enemy enemy);
+        public abstract void OnDamage(int damageAmount, DamageType damageType, Player player);
+        public abstract void OnAnyTurn(Player player, Enemy enemy, bool repeat);
         public abstract void OnUnequip(Player player);
     }
 }

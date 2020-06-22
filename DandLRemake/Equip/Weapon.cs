@@ -10,7 +10,7 @@
             Info = "Оружие на скорую руку, малоэффективно";
         }
 
-        public override void OnAnyTurn(Player player, Enemy enemy) { }
+        public override void OnAnyTurn(Player player, Enemy enemy, bool repeat) { }
 
         public override void OnAttack(Player player, Enemy enemy, int damage) { }
 
@@ -19,5 +19,7 @@
         public override void OnEquip(Player player) { }
 
         public override void OnUnequip(Player player) { }
+
+        public override void OnDamage(int damageAmount, DamageType damageType, Player player){ }
     }
 }

@@ -10,11 +10,13 @@ namespace DandLRemake.Equip
             Info = "Стандартные рабочие штаны";
         }
 
-        public override void OnAnyTurn(Player player, Enemy enemy) { }
+        public override void OnAnyTurn(Player player, Enemy enemy, bool repeat) { }
 
         public override void OnAttack(Player player, Enemy enemy, int damage) { }
 
         public override void OnDamage(int damageAmount, DamageType damageType, Player player, Enemy enemy) { }
+
+        public override void OnDamage(int damageAmount, DamageType damageType, Player player) { }
 
         public override void OnEquip(Player player) { }
 
